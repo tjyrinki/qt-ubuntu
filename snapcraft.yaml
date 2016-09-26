@@ -1,0 +1,297 @@
+name: qt-ubuntu
+version: '5.6.1'
+summary: Qt compiled with Ubuntu patches
+description: |
+  Qt is a cross-platform C++ application framework. Qt's primary feature
+  is its rich set of widgets that provide standard GUI functionality.
+  This package includes several Qt Project's Qt modules added with 
+  Ubuntu patches like backported fixes, and the Qt modules of the 
+  Ubuntu UI Toolkit.
+
+grade: stable
+confinement: strict
+
+slots:
+  qt-ubuntu:
+    interface: content
+    read:
+        - /usr/lib/
+        - /usr/include/x86_64-linux-gnu/qt5
+
+parts:
+  qtbase:
+    plugin: autotools
+    source-type: git
+    source: https://github.com/tjyrinki/qtbase.git
+    source-branch: 5.6.1
+# From deb packaging build deps
+    build-packages:
+               - debhelper
+               - dpkg-dev
+               - freetds-dev
+               - gdb
+               - libasound2-dev
+               - libatspi2.0-dev
+               - libcups2-dev
+               - libdbus-1-dev
+               - libfontconfig1-dev
+               - libfreetype6-dev
+               - libgbm-dev
+               - libgl1-mesa-dev
+               - libgles2-mesa-dev
+               - libglib2.0-dev
+               - libglu1-mesa-dev
+               - libgstreamer-plugins-base1.0-dev
+               - libgstreamer1.0-dev
+               - libgtk2.0-dev
+               - libharfbuzz-dev
+               - libicu-dev
+               - libinput-dev
+               - libjpeg-dev
+               - libmtdev-dev
+               - libmysqlclient-dev
+               - libpcre3-dev
+               - libpng-dev
+               - libpq-dev
+               - libproxy-dev
+               - libpulse-dev
+               - libsqlite3-dev
+               - libssl-dev
+               - libudev-dev
+               - libx11-dev
+               - libx11-xcb-dev
+               - libxcb-icccm4-dev
+               - libxcb-image0-dev
+               - libxcb-keysyms1-dev
+               - libxcb-randr0-dev
+               - libxcb-render-util0-dev
+               - libxcb-render0-dev
+               - libxcb-shape0-dev
+               - libxcb-shm0-dev
+               - libxcb-sync-dev
+               - libxcb-xfixes0-dev
+               - libxcb-xinerama0-dev
+               - libxcb-xkb-dev
+               - libxcb1-dev
+               - libxext-dev
+               - libxi-dev
+               - libxkbcommon-dev
+               - libxkbcommon-x11-dev
+               - libxrender-dev
+               - pkg-kde-tools
+               - publicsuffix
+               - unixodbc-dev
+               - xvfb
+               - zlib1g-dev
+# config flags: for arm64, -opengl es2 platform linux-g++
+    configflags: 
+        - -prefix
+        - $SNAP
+        - -bindir
+        - $SNAP/usr/bin
+        - -release
+#        - -libdir $SNAP/lib
+#        - -docdir $SNAP/doc
+#        - -headerdir $SNAP/include
+#        - -datadir $SNAP/share
+#        - -archdatadir $SNAP/lib
+#        - -hostdatadir $SNAP/share
+#        - -plugindir $SNAP/lib/plugins
+#        - -importdir $SNAP/lib/imports
+#        - -translationdir $SNAP/share/translations
+#        - -hostdatadir $SNAP/lib
+#        - -sysconfdir $SNAP/etc/xdg
+#        - -examplesdir $SNAP/lib/examples
+        - -confirm-license
+        - -opensource 
+        - -plugin-sql-mysql
+        - -plugin-sql-odbc
+        - -plugin-sql-psql
+        - -plugin-sql-sqlite
+        - -no-sql-sqlite2
+        - -plugin-sql-tds
+        - -system-sqlite
+        - -platform
+        - linux-g++-64
+        - -system-harfbuzz
+        - -system-zlib
+        - -system-libpng
+        - -system-libjpeg
+        - -openssl
+        - -no-rpath
+        - -verbose
+        - -optimized-qmake
+        - -dbus-linked
+        #- -no-strip
+        - -strip
+        #- -no-separate-debug-info
+        - -qpa
+        - xcb
+        - -xcb
+        - -glib
+        - -icu
+        - -accessibility
+        - -no-compile-examples
+        - -no-directfb
+        - -gstreamer
+        - "1.0"
+        - -opengl
+        - desktop
+# currently tailored from ubuntu 16.10 package names (mostly libpng etc)
+    stage-packages:
+        - fontconfig
+        - libc6
+        - libcups2
+        - libdbus-1-3
+        - libdrm2
+        - libegl1-mesa
+        - libfontconfig1
+        - libfreetype6
+        - libgbm1
+        - libgcc1
+        - libgl1-mesa-dev
+        - libgl1-mesa-glx
+        - libgles2-mesa-dev
+        - libglib2.0-0
+        - libglu1-mesa-dev
+        - libharfbuzz0b
+        - libice6
+        - libicu57
+        - libinput10
+        - libjpeg8
+        - libmtdev1
+        - libpcre16-3
+        - libpng16-16
+        - libproxy1v5
+        - libsm6
+        - libsqlite3-0
+        - libstdc++6
+        - libudev1
+        - libx11-6
+        - libx11-xcb1
+        - libxcb1
+        - libxcb-glx0
+        - libxcb-icccm4
+        - libxcb-image0
+        - libxcb-keysyms1
+        - libxcb-randr0
+        - libxcb-render0
+        - libxcb-render-util0
+        - libxcb-shape0
+        - libxcb-shm0
+        - libxcb-sync1
+        - libxcb-xfixes0
+        - libxcb-xkb1
+        - libxext-dev
+        - libxi6
+        - libxkbcommon0
+        - libxkbcommon-x11-0
+        - libxrender1
+        - perl
+        - zlib1g
+
+# TODO: the ones below don't really use the qtbase built earlier
+  qtxmlpatterns:
+    after: [qtbase]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtxmlpatterns.git
+    source-branch: 5.6.1
+
+  qtdeclarative:
+    after: [qtbase, qtxmlpatterns]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtdeclarative.git
+    source-branch: 5.6.1
+    build-packages:
+               - libdouble-conversion-dev
+               - python
+    stage-packages:
+        - libdouble-conversion1v5
+
+  qttools:
+    after: [qtbase, qtxmlpatterns, qtdeclarative]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qttools.git
+    source-branch: 5.6.1
+
+  qtmultimedia:
+    after: [qtbase, qtxmlpatterns, qtdeclarative, qttools]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtmultimedia.git
+    source-branch: 5.6.1
+    build-packages:
+        - libasound2-dev
+        - libgstreamer-plugins-base1.0-dev
+        - libgstreamer1.0-dev
+        - libpulse-dev
+        - zlib1g-dev
+    stage-packages:
+        - libpulse0
+
+  qttools:
+    after: [qtbase, qtxmlpatterns, qtdeclarative]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qttools.git
+    source-branch: 5.6.1
+
+  qtsvg:
+    after: [qtbase, qtxmlpatterns, qtdeclarative]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtsvg.git
+    source-branch: 5.6.1
+
+  qtpim:
+    after: [qtbase, qtxmlpatterns, qtdeclarative]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtpim.git
+    source-branch: master
+
+  qtgraphicaleffects:
+    after: [qtbase, qtxmlpatterns, qtdeclarative]
+    plugin: qmake
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/qtgraphicaleffects.git
+    source-branch: 5.6.1
+
+# Not enough build dependencies listed for a clean build
+  ubuntu-ui-toolkit:
+    after: [qtbase, qtxmlpatterns, qtdeclarative, qttools, qtmultimedia, qtsvg, qtpim, qtgraphicaleffects]
+    plugin: qmake
+    options:
+        - QT_QPA_PLATFORM=minimal
+    qt-version: qt5
+    source-type: git
+    source: https://github.com/tjyrinki/ubuntu-ui-toolkit.git
+    source-branch: master
+    build-packages:
+        - dbus
+        - dbus-test-runner
+        - devscripts
+        - gdb
+        - libdbus-1-dev
+        - liblttng-ust-dev
+        - libnih-dbus-dev
+        - libqt5svg5-dev
+#        - qtdeclarative5-unity-action-plugin
+        - qtpim5-dev
+    stage-packages:
+        - libnih-dbus1
+#        - qtdeclarative5-unity-action-plugin
+        - suru-icon-theme
+        - ttf-ubuntu-font-family
+
