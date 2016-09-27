@@ -52,7 +52,7 @@ parts:
                - libmtdev-dev
                - libmysqlclient-dev
                - libpcre3-dev
-#               - libpng-dev ##FIXME not found ?
+               - libpng12-dev
                - libpq-dev
                - libproxy-dev
                - libpulse-dev
