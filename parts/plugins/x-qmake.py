@@ -118,6 +118,13 @@ class QmakePlugin(snapcraft.BasePlugin):
             for path in paths:
                 extra_config.append("INCLUDEPATH+=\"{}\"".format(path))
             extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtbase/build/NAP/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtxmlpatterns/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtdeclarative/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qttools/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtmultimedia/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtsvg/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtgraphicaleffects/build/include'))
+            extra_config.append("INCLUDEPATH+=\"{}\"".format(self.project.parts_dir + '/qtpim/build/include'))
         return extra_config
 
     def _build_environment(self):
