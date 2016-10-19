@@ -14,9 +14,10 @@ confinement: strict
 
 slots:
   qt-ubuntu:
+    content: qt-ubuntu
     interface: content
     read:
-        - /usr/lib/
+        - $SNAP/usr/lib
 
 parts:
   qt-ubuntu:
