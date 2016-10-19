@@ -1,9 +1,10 @@
 name: qt-ubuntu
 version: '5.6.1'
-summary: Qt compiled with Ubuntu patches
+summary: Qt with Ubuntu patches
 description: |
   Qt is a cross-platform C++ application framework. Qt's primary feature
   is its rich set of widgets that provide standard GUI functionality.
+
   This package includes several Qt Project's Qt modules added with
   Ubuntu patches like backported fixes, and the Qt modules of the
   Ubuntu UI Toolkit.
@@ -19,11 +20,10 @@ slots:
         - /usr/include/x86_64-linux-gnu/qt5
 
 parts:
-  qtbase:
-    plugin: autotools
-    source-type: git
-    source: https://github.com/tjyrinki/qtbase.git
-    source-branch: 5.6.1
+  qt-ubuntu:
+    plugin: make
+    source: .
+    make-parameters: ["SRC_DIR=../src"]
 # From deb packaging build deps
     build-packages:
                - g++
@@ -84,60 +84,26 @@ parts:
                - unixodbc-dev
                - xvfb
                - zlib1g-dev
-# config flags: for arm64, -opengl es2 platform linux-g++
-    configflags:
-        - -prefix
-        - $SNAP
-        - -bindir
-        - $SNAP/usr/bin
-        - -release
-#        - -libdir $SNAP/lib
-#        - -docdir $SNAP/doc
-#        - -headerdir $SNAP/include
-#        - -datadir $SNAP/share
-#        - -archdatadir $SNAP/lib
-#        - -hostdatadir $SNAP/share
-#        - -plugindir $SNAP/lib/plugins
-#        - -importdir $SNAP/lib/imports
-#        - -translationdir $SNAP/share/translations
-#        - -hostdatadir $SNAP/lib
-#        - -sysconfdir $SNAP/etc/xdg
-#        - -examplesdir $SNAP/lib/examples
-        - -confirm-license
-        - -opensource
-        - -plugin-sql-mysql
-        - -plugin-sql-odbc
-        - -plugin-sql-psql
-        - -plugin-sql-sqlite
-        - -no-sql-sqlite2
-        - -plugin-sql-tds
-        - -system-sqlite
-        - -platform
-        - linux-g++-64
-        - -system-harfbuzz
-        - -system-zlib
-        - -system-libpng
-        - -system-libjpeg
-        - -openssl
-        - -no-rpath
-        - -verbose
-        - -optimized-qmake
-        - -dbus-linked
-        #- -no-strip
-        - -strip
-        #- -no-separate-debug-info
-        - -qpa
-        - xcb
-        - -xcb
-        - -glib
-        - -icu
-        - -accessibility
-        - -no-compile-examples
-        - -no-directfb
-        - -gstreamer
-        - "1.0"
-        - -opengl
-        - desktop
+               # qtdeclarative
+               - libdouble-conversion-dev
+               - python
+        # qtmultimedia
+        - libasound2-dev
+        - libgstreamer-plugins-base1.0-dev
+        - libgstreamer1.0-dev
+        - libpulse-dev
+        - zlib1g-dev
+        # ubuntu-ui-toolkit
+        - dbus
+        - dbus-test-runner
+        - devscripts
+        - gdb
+        - libdbus-1-dev
+        - liblttng-ust-dev
+        - libnih-dbus-dev
+        - libqt5svg5-dev
+        - qtdeclarative5-unity-action-plugin
+        - qtpim5-dev
 # currently tailored from ubuntu 16.10 package names (mostly libpng etc)
     stage-packages:
         - fontconfig
@@ -190,109 +156,41 @@ parts:
         - libxrender1
         - perl
         - zlib1g
-
-# TODO: the ones below don't really use the qtbase built earlier
-  qtxmlpatterns:
-    after: [qtbase]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtxmlpatterns.git
-    source-branch: 5.6.1
-
-  qtdeclarative:
-    after: [qtbase, qtxmlpatterns]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtdeclarative.git
-    source-branch: 5.6.1
-    build-packages:
-               - libdouble-conversion-dev
-               - python
-    stage-packages:
+        # qtdeclarative
         - libdouble-conversion1v5
-
-  qttools:
-    after: [qtbase, qtxmlpatterns, qtdeclarative]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qttools.git
-    source-branch: 5.6.1
-
-  qtmultimedia:
-    after: [qtbase, qtxmlpatterns, qtdeclarative, qttools]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtmultimedia.git
-    source-branch: 5.6.1
-    build-packages:
-        - libasound2-dev
-        - libgstreamer-plugins-base1.0-dev
-        - libgstreamer1.0-dev
-        - libpulse-dev
-        - zlib1g-dev
-    stage-packages:
+        # qtmultimedia
         - libpulse0
-
-  qttools:
-    after: [qtbase, qtxmlpatterns, qtdeclarative]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qttools.git
-    source-branch: 5.6.1
-
-  qtsvg:
-    after: [qtbase, qtxmlpatterns, qtdeclarative]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtsvg.git
-    source-branch: 5.6.1
-
-  qtpim:
-    after: [qtbase, qtxmlpatterns, qtdeclarative]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtpim.git
-    source-branch: master
-
-  qtgraphicaleffects:
-    after: [qtbase, qtxmlpatterns, qtdeclarative]
-    plugin: qmake
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/qtgraphicaleffects.git
-    source-branch: 5.6.1
-
-# Not enough build dependencies listed for a clean build
-  ubuntu-ui-toolkit:
-    after: [qtbase, qtxmlpatterns, qtdeclarative, qttools, qtmultimedia, qtsvg, qtpim, qtgraphicaleffects]
-    plugin: qmake
-    options:
-        - QT_QPA_PLATFORM=minimal
-    qt-version: qt5
-    source-type: git
-    source: https://github.com/tjyrinki/ubuntu-ui-toolkit.git
-    source-branch: master
-    build-packages:
-        - dbus
-        - dbus-test-runner
-        - devscripts
-        - gdb
-        - libdbus-1-dev
-        - liblttng-ust-dev
-        - libnih-dbus-dev
-        - libqt5svg5-dev
-#        - qtdeclarative5-unity-action-plugin
-        - qtpim5-dev
-    stage-packages:
+        # ubuntu-ui-toolkit
         - libnih-dbus1
-#        - qtdeclarative5-unity-action-plugin
+        - qtdeclarative5-unity-action-plugin
         - suru-icon-theme
         - ttf-ubuntu-font-family
+        # ubuntu-sdk-libs
+        - libqt5multimedia5-plugins
+        - libqt5sql5-sqlite
+        - qml-module-qt-labs-folderlistmodel
+        - qml-module-qt-labs-settings
+        - qml-module-qt-websockets
+        - qml-module-qtbluetooth
+        - qml-module-qtgraphicaleffects
+        - qml-module-qtlocation
+        - qml-module-qtmultimedia
+        - qml-module-qtorganizer
+        - qml-module-qtpositioning
+        - qml-module-qtpurchasing
+        - qml-module-qtqml-models2
+        - qml-module-qtqml-statemachine
+        - qml-module-qtquick-layouts
+        - qml-module-qtquick-localstorage
+        - qml-module-qtquick-particles2
+        - qml-module-qtquick-window2
+        - qml-module-qtquick-xmllistmodel
+        - qml-module-qtquick2
+        - qml-module-qtsensors
+        - qml-module-qtsysteminfo
+        - qml-module-ubuntu-components
+        - qmlscene
+        - qt5-image-formats-plugins
+        - qtchooser
+        - ubuntu-ui-toolkit-theme
 
