@@ -17,13 +17,12 @@ slots:
     interface: content
     read:
         - /usr/lib/
-        - /usr/include/x86_64-linux-gnu/qt5
 
 parts:
   qt-ubuntu:
-    plugin: make
-    source: .
-    make-parameters: ["SRC_DIR=../src"]
+    plugin: nil
+    #source: .
+    #make-parameters: ["SRC_DIR=../src"]
 # From deb packaging build deps
     build-packages:
                - g++
@@ -84,26 +83,18 @@ parts:
                - unixodbc-dev
                - xvfb
                - zlib1g-dev
-               # qtdeclarative
+        # qtdeclarative
                - libdouble-conversion-dev
                - python
-        # qtmultimedia
-        - libasound2-dev
-        - libgstreamer-plugins-base1.0-dev
-        - libgstreamer1.0-dev
-        - libpulse-dev
-        - zlib1g-dev
         # ubuntu-ui-toolkit
-        - dbus
-        - dbus-test-runner
-        - devscripts
-        - gdb
-        - libdbus-1-dev
-        - liblttng-ust-dev
-        - libnih-dbus-dev
-        - libqt5svg5-dev
-        - qtdeclarative5-unity-action-plugin
-        - qtpim5-dev
+               - dbus
+               - dbus-test-runner
+               - devscripts
+               - liblttng-ust-dev
+               - libnih-dbus-dev
+               - libqt5svg5-dev
+               - qtdeclarative5-unity-action-plugin
+               - qtpim5-dev
 # currently tailored from ubuntu 16.10 package names (mostly libpng etc)
     stage-packages:
         - fontconfig
