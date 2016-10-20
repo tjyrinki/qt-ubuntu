@@ -17,13 +17,11 @@ slots:
     content: qt-ubuntu
     interface: content
     read:
-        - /usr/lib
+        - qt-ubuntu
 
 parts:
   qt-ubuntu:
     plugin: nil
-    #source: .
-    #make-parameters: ["SRC_DIR=../src"]
 # From deb packaging build deps
     build-packages:
                - g++
@@ -185,4 +183,8 @@ parts:
         - qt5-image-formats-plugins
         - qtchooser
         - ubuntu-ui-toolkit-theme
+
+    organize:
+        etc/*: qt-ubuntu/etc/
+        usr/*: qt-ubuntu/usr/
 
