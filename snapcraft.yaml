@@ -17,7 +17,7 @@ slots:
     content: qt-ubuntu
     interface: content
     read:
-        - $SNAP/usr/lib
+        - /usr/lib
 
 parts:
   qt-ubuntu:
